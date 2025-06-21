@@ -232,39 +232,154 @@
             <a href="/" class="back-btn">← Назад к топу</a>
             <h1>Детали аниме</h1>
         </div>
-
+        
         <div class="anime-hero">
             <div class="anime-poster">
-                <img src="{{anime.images.jpg.large_image_url}}" alt="{{ anime.title}}" class="poster-image">
+                <img src="{{ anime.images.jpg.large_image_url }}" 
+                     alt="{{ anime.title }}" 
+                     class="poster-image">
             </div>
-
+            
             <div class="anime-main-info">
                 <div class="title-section">
-                    <h1>{{anime.title}}</h1>
+                    <h1>{{ anime.title }}</h1>
                     {% if anime.title_japanese %}
-                    <div class="title-japanese">{{anime.title_japanese}}</div>
+                    <div class="title-japanese">{{ anime.title_japanese }}</div>
                     {% endif %}
                 </div>
+                
                 <div class="stats-grid">
                     <div class="stat-item">
-                        <span class="stat-value">{{ anime.value  if anime.score else 'N/A'}}</span>
+                        <span class="stat-value">{{ anime.score if anime.score else 'N/A' }}</span>
                         <div class="stat-label">⭐ Рейтинг</div>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-value">{{ anime.rank if anime.rank else 'N/A'}}</span>
+                        <span class="stat-value">{{ anime.rank if anime.rank else 'N/A' }}</span>
                         <div class="stat-label">🏆 Место в топе</div>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-value">{{ anime}}</span>
-
+                        <span class="stat-value">{{ anime.scored_by if anime.scored_by else 'N/A' }}</span>
+                        <div class="stat-label">👥 Оценили</div>
                     </div>
-
+                    <div class="stat-item">
+                        <span class="stat-value">{{ anime.members if anime.members else 'N/A' }}</span>
+                        <div class="stat-label">📊 В списках</div>
+                    </div>
                 </div>
+                
+                {% if anime.status %}
+                <div>
+                    <span class="status-badge 
+                        {% if anime.status == 'Finished Airing' %}status-finished
+                        {% elif anime.status == 'Currently Airing' %}status-airing
+                        {% elif anime.status == 'Not yet aired' %}status-upcoming
+                        {% else %}status-unknown{% endif %}">
+                        {{ anime.status }}
+                    </span>
+                </div>
+                {% endif %}
+                
+                {% if anime.genres %}
+                <div class="genres-section">
+                    <div class="genres-list">
+                        {% for genre in anime.genres %}
+                        <span class="genre-tag">{{ genre.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
             </div>
-
         </div>
-
+        
+        {% if anime.synopsis %}
+        <div class="content-section">
+            <h2 class="section-title">📖 Описание</h2>
+            <div class="synopsis">{{ anime.synopsis }}</div>
+        </div>
+        {% endif %}
+        
+        <div class="content-section">
+            <h2 class="section-title">📋 Подробная информация</h2>
+            <div class="details-grid">
+                <div class="detail-card">
+                    <div class="detail-title">📺 Формат</div>
+                    <div class="detail-content">{{ anime.type if anime.type else 'Неизвестно' }}</div>
+                </div>
+                
+                <div class="detail-card">
+                    <div class="detail-title">📅 Годы выхода</div>
+                    <div class="detail-content">
+                        {% if anime.aired and anime.aired.string %}
+                            {{ anime.aired.string }}
+                        {% else %}
+                            {{ anime.year if anime.year else 'Неизвестно' }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="detail-card">
+                    <div class="detail-title">📺 Эпизоды</div>
+                    <div class="detail-content">{{ anime.episodes if anime.episodes else 'Неизвестно' }}</div>
+                </div>
+                
+                <div class="detail-card">
+                    <div class="detail-title">⏱️ Длительность</div>
+                    <div class="detail-content">{{ anime.duration if anime.duration else 'Неизвестно' }}</div>
+                </div>
+                
+                <div class="detail-card">
+                    <div class="detail-title">🎭 Рейтинг</div>
+                    <div class="detail-content">{{ anime.rating if anime.rating else 'Неизвестно' }}</div>
+                </div>
+                
+                <div class="detail-card">
+                    <div class="detail-title">📈 Популярность</div>
+                    <div class="detail-content">#{{ anime.popularity if anime.popularity else 'N/A' }}</div>
+                </div>
+                
+                {% if anime.studios %}
+                <div class="detail-card">
+                    <div class="detail-title">🏢 Студии</div>
+                    <div class="detail-content">
+                        <div class="studios-list">
+                            {% for studio in anime.studios %}
+                            <span class="studio-tag">{{ studio.name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if anime.producers %}
+                <div class="detail-card">
+                    <div class="detail-title">🎬 Продюсеры</div>
+                    <div class="detail-content">
+                        <div class="producers-list">
+                            {% for producer in anime.producers[:5] %}
+                            <span class="producer-tag">{{ producer.name }}</span>
+                            {% endfor %}
+                            {% if anime.producers|length > 5 %}
+                            <span class="producer-tag">+{{ anime.producers|length - 5 }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="external-links">
+                {% if anime.url %}
+                <a href="{{ anime.url }}" target="_blank" class="external-link">
+                    📖 MyAnimeList
+                </a>
+                {% endif %}
+                {% if anime.trailer and anime.trailer.url %}
+                <a href="{{ anime.trailer.url }}" target="_blank" class="external-link">
+                    🎬 Трейлер
+                </a>
+                {% endif %}
+            </div>
+        </div>
     </div>
-    
 </body>
 </html>
