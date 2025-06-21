@@ -86,11 +86,181 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            background: linear-gradient();
+            background: linear-gradient(linear-gradient);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            z-index: 2;
+        }
+        .anime-image{
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: all 0.3s;
+        }
+        .anime-card:hover .anime-image{
+            transform: scale(1.05);
+        }
+        .anime-info{
+            padding: 20px;
+        }
+        .anime-title{
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 2.8em;
+            overflow: hidden;
+        }
+        .anime-meta{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .anime-score{
+            background: #4ecdc4;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .anime-type{
+            background: #95a5a6;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            text-transform: uppercase;
+        }
+        .anime-year{
+            color: #666;
+            font-size: 0.9em;
+        }
+        .anime-genres{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 10px 0;
+        }
+        .genre-tag{
+            background: #e9ecef;
+            color: #495057;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+        }
+        .anime-synopsis{
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin: 4.5em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .anime-link{
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        .anime-link:hover{
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.3);
+        }
+        .pagination{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        .page-btn{
+            padding:10px 15px;
+            border: none;
+            background: #6c757d;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        .page-btn:hover{
+            background: #495057;
+            transform: translateY(-2px);
+        }
+        .page-btn.active{
+            background: #667eea;
+        }
+        .page-btn:disabled{
+            background: #dee2e6;
+            color: #6c757d;
+            cursor: not-allowed;
+        }
+        .page-info{
+            margin: 0 15px;
+            color: #666;
+            font-weight: bold;
+        }
+        .loading{
+            text-align: center;
+            padding: 50px;
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        @media (max-width:768){
+            .anime-grid{
+                grid-template-columns: repeat(auto-fill, minmax(280, 1fr));
+                gap: 15px;
+                padding: 20px;
+            }
+            .pagination{
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            .filter-row{
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-select{
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 Топ Аниме</h1>
+            <p>Лучшие аниме по Рейтингу MyAnimeList</p>
+        </div>
+
+        <div class="filters">
+            <form method="get" class="filter-row">
+                <span class="filter-label">📺 Тип:</span>
+                <select name="type" class="filter-select" onchange="this.form.submit()">
+                    {% for type_option in data.anime_types %}
+                    <option value="{{ type_option.value }}" 
+                            {% if type_option.value == data.current_type %}selected{% endif %}>
+                        {{ type_option.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
     
 </body>
 </html>
