@@ -98,3 +98,22 @@ def top_anime():
     }
 
     return render_template('top_anime.html', data=template_data)
+
+@app.route('/anime/<int:anime_id>')
+def anime_details(anime_id):
+    '''Детальная страница аниме'''
+    try:
+        url = f'https://api.jikan.moe/v4/anime/{anime_id}'
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            anime_data = response.json()['data']
+            return render_template('anime_details.html', anime=anime_data)
+        else:
+            return f'Аниме не найдено (ID: {anime_id})', 404
+    
+    except Exception as e:
+        return f'Ошибка загрузки: {str(e)}', 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
